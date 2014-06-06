@@ -1,0 +1,17 @@
+[global]
+ioengine=rbd
+clientname=admin
+pool=rbd
+rbdname=rbd-test
+invalidate=0
+
+iodepth=32
+nrfiles=1
+runtime=10
+direct=1
+sync=1
+unlink=1
+numjobs=1
+thread=0
+disk_util=0
+
