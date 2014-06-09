@@ -6,23 +6,25 @@
 #
 # Author: Ricardo Rocha <ricardo@catalyst.net.nz>
 #
-if [ ! -d /tmp/fio ]; then
-  mkdir /tmp/fio
+engine=$1
+
+if [ ! -d /tmp/${engine} ]; then
+  mkdir /tmp/${engine}
 fi
 
 resultsdir=results/$(date +%s)
 
-if [ ! -d $resultsdir/fio ]; then
-  mkdir $resultsdir/fio -p
+if [ ! -d $resultsdir/${engine} ]; then
+  mkdir $resultsdir/${engine} -p
 fi
 
-for envtest in $(ls fio/env-*.fio)
+for envtest in $(ls ${engine}/env-*.fio)
 do
 
   while read line
   do
-    jobfile=/tmp/fio/job-$(date +%s).fio
-    cat fio/global.fio ${envtest} > $jobfile
+    jobfile=/tmp/${engine}/job-$(date +%s).fio
+    cat ${engine}/global.fio ${envtest} > $jobfile
 
     export ${line}
     for param in 'BS' 'RW'
@@ -33,12 +35,14 @@ do
     if [ -z "$GRAPHITE" ]; then
       echo "Not sending graphite data"
     else
-      curl -X POST "${GRAPHITE}" -d "{\"what\": \"Env: ${line} File: ${envtest}\", \"tags\": \"fio\", \"data\": \"$(sed ':a;N;$!ba;s/\n/\\n/g' $envtest)\"}"
+      curl -X POST "${GRAPHITE}" -d "{\"what\": \"Env: ${line} File: ${envtest}\", \"tags\": \"fio\", \"data\": \"$(sed ':a;N;$!ba;s/\n/\\n/g' $jobfile)\"}"
     fi
 
-  	${FIOCMD:-fio} --output $resultsdir/fio/$(grep '^name' $jobfile | sed -e 's/name=//g').log $jobfile 
+    filename=$(grep '^name' $jobfile | sed -e 's/name=//g')
+  	${FIOCMD:-fio} --output $resultsdir/${engine}/${filename}.log $jobfile 
+
+    mv *.log $resultsdir/${engine}
   done < ${envtest}.env
 
-  mv *.log $resultsdir/fio
 done
 

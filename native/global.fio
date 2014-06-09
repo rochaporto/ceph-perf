@@ -1,0 +1,14 @@
+[global]
+ioengine=libaio
+iodepth=8
+nrfiles=1
+direct=1
+sync=0
+unlink=1
+numjobs=1
+thread=0
+disk_util=0
+directory=/var/lib/ceph/osd/ceph-0
+size=10g
+runtime=1m
+
