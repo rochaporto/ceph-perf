@@ -5,11 +5,11 @@ pool=rbd
 rbdname=rbd-fio-test
 invalidate=0
 
-#iodepth=32
+iodepth=32
 nrfiles=1
 runtime=120
 direct=1
-sync=0
+sync=1
 unlink=1
 numjobs=1
 thread=0

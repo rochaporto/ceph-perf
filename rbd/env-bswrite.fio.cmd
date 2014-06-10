@@ -1,0 +1,1 @@
+for i in '1k' '2k' '4k' '8k' '16k' '32k' '64k' '1M' '2M' '4M'; do rbd -p rbd rm env-write-$i || true; rbd -p rbd rm env-randwrite-$i || true; rbd -p rbd create env-write-${i} --size 32079; rbd create env-randwrite-${i} --size 32079; done
