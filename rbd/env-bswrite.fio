@@ -3,7 +3,6 @@ write_bw_log=env-${RW}-${BS}
 write_iops_log=env-${RW}-${BS}
 write_lat_log=env-${RW}-${BS}
 name=env-${RW}-${BS}
-rbdname=env-${RW}-${BS}
 bs=${BS}
 rw=${RW}
 
